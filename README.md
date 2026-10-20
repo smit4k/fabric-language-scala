@@ -94,6 +94,8 @@ Install JDK 25, then run:
 ./gradlew publishMods
 ```
 
+The checked-in daemon JVM criteria select an installed JDK 25 even when your shell uses another Java version. A Java compilation toolchain alone does not select the JVM that loads Loom. Check `./gradlew --version` for `Daemon JVM` when diagnosing a Java-version error.
+
 `build` runs adapter tests, distributable and Maven-metadata checks, and a standalone build of both consumer mods against `build/repo`. `prodServer` and `prodClient` launch the packaged JARs using Loom's production launchers, verify both common entrypoints and the appropriate client entrypoint, and exit after startup. Their temporary files and logs are under `build/smoke`. The server test writes EULA acceptance in that test directory and binds only to localhost with an ephemeral port. The client test needs a graphical session or Linux Xvfb with software graphics support.
 
 To check the language module on another supported Java runtime, keep Gradle on JDK 25 and select an installed test JDK:
@@ -105,6 +107,8 @@ To check the language module on another supported Java runtime, keep Gradle on J
 ```
 
 Gradle must be able to discover the selected JDK; otherwise pass its home using `-Dorg.gradle.java.installations.paths=/path/to/jdk`.
+
+Running `testJava17` and `testJava21` together requires JDKs 17 and 21 in addition to JDK 25. On macOS, install JDK bundles in `~/Library/Java/JavaVirtualMachines` or `/Library/Java/JavaVirtualMachines` so Gradle can discover them.
 
 `publishMods` defaults to a dry run even when tokens are present. It writes previews under `build/publishMods` and performs no uploads. Local artifacts carry a `.local` suffix.
 
